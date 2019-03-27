@@ -3,6 +3,7 @@ matplotlib.use('Agg')  # noqa
 
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 
 from bandits import BernoulliBandit
 from solvers import Solver, EpsilonGreedy, UCB1, BayesianUCB, ThompsonSampling
@@ -96,5 +97,33 @@ def experiment(K, N):
     plot_results(test_solvers, names, "results_K{}_N{}.png".format(K, N))
 
 
+def readCommandLine(argv):
+    '''Deal with the command line.
+    '''
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+
+    parser.add_argument('-B', '--number-of-bandits', action = None,
+                        default = 10,
+                        help = 'Number of "Bandits" during experiment.')
+
+    parser.add_argument('-s', '--number-of-steps', action = None,
+                        default = 5000,
+                        help = 'Number of steps during experiment.')
+
+    args = parser.parse_args(argv[1:])
+
+    return args
+
+
 if __name__ == '__main__':
-    experiment(10, 5000)
+    args = readCommandLine(sys.argv)
+    print args.number_of_bandits, args.number_of_steps
+
+    experiment(int(args.number_of_bandits), int(args.number_of_steps))
+#    experiment(10, 5000)
+
+
+
+
